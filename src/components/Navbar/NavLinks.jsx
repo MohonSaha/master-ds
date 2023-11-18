@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
 import { links } from "./MyLinks";
 import { useState } from "react";
+import { IoChevronDownOutline, IoChevronUpOutline } from "react-icons/io5";
 
 
 const NavLinks = () => {
 
-    const [heading, setHeading] = useState()
+    const [heading, setHeading] = useState();
+    const [subHeading, setSubHeading] = useState()
 
     return (
         <>
@@ -13,8 +15,24 @@ const NavLinks = () => {
                 links.map((link) => (
                     <div key={link.name}>
                         <div className="px-3 text-left md:cursor-pointer group">
-                            <h1 className="py-7" onClick={()=> 
-                            heading !== link.name ? setHeading(link.name) : setHeading('')}>{link.name}</h1>
+                            <h1 className="py-7 flex justify-between items-center md:pr-0 pr-5 group" onClick={() => {
+                                heading !== link.name ? setHeading(link.name) : setHeading('');
+                                setSubHeading('')
+                            }}>
+                                {link.name}
+                                <span className="text-xl md:hidden md:ml-2 inline">
+
+                                    {
+                                        heading === link.name ? <IoChevronUpOutline /> : <IoChevronDownOutline />
+                                    }
+                                </span>
+                                <span className="text-xl md:mt- md:ml-2 md:block hidden group-hover:rotate-180 duration-100">
+
+                                    {
+                                        heading === link.name ? <IoChevronUpOutline /> : <IoChevronDownOutline />
+                                    }
+                                </span>
+                            </h1>
                             {link.submenu && (
                                 <div>
                                     <div className="absolute top-20 hidden group-hover:md:block hover:md:block ">
@@ -45,16 +63,26 @@ const NavLinks = () => {
                         </div>
 
                         {/* Mobile Menu */}
-                        <div className={`${heading === link.name? "md:hidden" : "hidden"}`}>
+                        <div className={`${heading === link.name ? "md:hidden" : "hidden"}`}>
                             {
                                 link.sublinks.map((slinks) => (
                                     <div key={slinks}>
                                         <div>
-                                            <h1 className="py-4 pl-7 font-semibold md:pr-0 pr-5">{slinks.Head}</h1>
-                                            <div>
+                                            <h1 onClick={() => {
+                                                subHeading !== slinks.Head ? setSubHeading(slinks.Head) : setSubHeading('');
+                                            }}
+                                                className="py-4 pl-7 font-semibold md:pr-0 pr-5 flex justify-between items-center">{slinks.Head}
+                                                <span className="text-xl md:mt-2 md:ml-2 inline">
+
+                                                    {
+                                                        subHeading === slinks.Head ? <IoChevronUpOutline /> : <IoChevronDownOutline />
+                                                    }
+                                                </span>
+                                            </h1>
+                                            <div className={`${subHeading === slinks.Head ? "md:hidden" : "hidden"}`}>
                                                 {slinks.sublink.map((slink) => (
                                                     <li key={slink} className="py-3 pl-14">
-                                                        <Link to={slink.link}>{slink.name}</Link>
+                                                        <Link className="hover:text-primary" to={slink.link}>{slink.name}</Link>
                                                     </li>
                                                 ))}
                                             </div>
